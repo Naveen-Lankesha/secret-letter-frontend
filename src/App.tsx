@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateSecret from "./pages/CreateSecret";
 import ViewSecret from "./pages/ViewSecret";
 import MagicBackground from "./components/MagicBackground";
+import { MusicProvider } from "./context/MusicContext";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -65,23 +66,25 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="min-h-screen stars-background">
-          <MagicBackground />
-          <AppRoutes />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              className: "magic-card",
-              style: {
-                background: "rgba(88, 28, 135, 0.9)",
-                color: "#fff",
-                border: "1px solid rgba(168, 85, 247, 0.3)",
-              },
-            }}
-          />
-        </div>
-      </Router>
+      <MusicProvider>
+        <Router>
+          <div className="min-h-screen stars-background">
+            <MagicBackground />
+            <AppRoutes />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                className: "magic-card",
+                style: {
+                  background: "rgba(88, 28, 135, 0.9)",
+                  color: "#fff",
+                  border: "1px solid rgba(168, 85, 247, 0.3)",
+                },
+              }}
+            />
+          </div>
+        </Router>
+      </MusicProvider>
     </AuthProvider>
   );
 }

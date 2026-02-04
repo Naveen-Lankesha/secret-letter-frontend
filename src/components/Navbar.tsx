@@ -1,12 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Sparkles, LogOut, Scroll, Home } from "lucide-react";
+import { Sparkles, LogOut, Scroll, Home, Volume2, VolumeX } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useMusic } from "../context/MusicContext";
 import { motion } from "framer-motion";
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+  const { enabled, toggle } = useMusic();
 
   const handleLogout = () => {
     logout();
@@ -28,6 +30,21 @@ const Navbar: React.FC = () => {
           </Link>
 
           <div className="flex items-center space-x-4">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label={
+                enabled ? "Mute background music" : "Unmute background music"
+              }
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-purple-800/30 border border-purple-500/30 text-purple-200 hover:text-white hover:bg-purple-700/30 transition-colors"
+              title={enabled ? "Mute music" : "Play music"}>
+              {enabled ? (
+                <Volume2 className="w-5 h-5" />
+              ) : (
+                <VolumeX className="w-5 h-5" />
+              )}
+            </button>
+
             <Link
               to="/"
               className="flex items-center space-x-1 text-purple-200 hover:text-white transition-colors">
