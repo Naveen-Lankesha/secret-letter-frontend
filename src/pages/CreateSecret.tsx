@@ -6,6 +6,7 @@ import { Wand2, Plus, X, Copy, Check } from "lucide-react";
 import { secretAPI } from "../api/api";
 import toast from "react-hot-toast";
 import PetalBackground from "../components/PetalBackground";
+import SpellBeamBackground from "../components/SpellBeamBackground";
 
 interface Hint {
   text: string;
@@ -209,6 +210,9 @@ const CreateSecret: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="magic-card p-8 relative overflow-hidden">
           {theme === "love" && <PetalBackground className="z-0" />}
+          {theme === "dark" && (
+            <SpellBeamBackground casts={5} className="z-0" />
+          )}
           <div className="relative z-10">
             <div className="text-center mb-8">
               <Wand2 className="w-12 h-12 text-purple-400 mx-auto mb-4 animate-pulse" />

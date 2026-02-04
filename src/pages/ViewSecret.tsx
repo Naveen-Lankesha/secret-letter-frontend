@@ -5,6 +5,7 @@ import { Lock, Eye, Sparkles, AlertCircle } from "lucide-react";
 import { secretAPI } from "../api/api";
 import toast from "react-hot-toast";
 import PetalBackground from "../components/PetalBackground";
+import SpellBeamBackground from "../components/SpellBeamBackground";
 
 interface Secret {
   secretId: string;
@@ -102,6 +103,13 @@ const ViewSecret: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className={`${getThemeClass(secret.theme)} p-8 backdrop-blur-sm border rounded-2xl shadow-2xl relative overflow-hidden`}>
             {secret.theme === "love" && <PetalBackground className="z-0" />}
+            {secret.theme === "dark" && (
+              <SpellBeamBackground
+                casts={5}
+                origin="bottom-right"
+                className="z-0"
+              />
+            )}
             <div className="relative z-10">
               <div className="text-center mb-8">
                 <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-pulse" />
@@ -144,6 +152,13 @@ const ViewSecret: React.FC = () => {
         animate={{ opacity: 1, scale: 1 }}
         className={`${getThemeClass(secret.theme)} p-8 w-full max-w-md backdrop-blur-sm border rounded-2xl shadow-2xl relative overflow-hidden`}>
         {secret.theme === "love" && <PetalBackground className="z-0" />}
+        {secret.theme === "dark" && (
+          <SpellBeamBackground
+            casts={4}
+            origin="bottom-right"
+            className="z-0"
+          />
+        )}
         <div className="relative z-10">
           <div className="text-center mb-8">
             <Lock className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-pulse" />
