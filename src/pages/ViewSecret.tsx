@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Lock, Eye, Sparkles, AlertCircle } from "lucide-react";
 import { secretAPI } from "../api/api";
 import toast from "react-hot-toast";
+import PetalBackground from "../components/PetalBackground";
 
 interface Secret {
   secretId: string;
@@ -58,6 +59,7 @@ const ViewSecret: React.FC = () => {
       slytherin: "slytherin-theme",
       ravenclaw: "ravenclaw-theme",
       hufflepuff: "hufflepuff-theme",
+      love: "love-theme",
       dark: "bg-gradient-to-br from-gray-900/50 to-black/50 border-gray-500/30",
       magic: "magic-card",
     };
@@ -98,31 +100,36 @@ const ViewSecret: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`${getThemeClass(secret.theme)} p-8 backdrop-blur-sm border rounded-2xl shadow-2xl`}>
-            <div className="text-center mb-8">
-              <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-pulse" />
-              <h1 className="text-4xl font-magical text-purple-100 mb-2">
-                {secret.title}
-              </h1>
-              <p className="text-purple-300">The secret has been revealed...</p>
-            </div>
+            className={`${getThemeClass(secret.theme)} p-8 backdrop-blur-sm border rounded-2xl shadow-2xl relative overflow-hidden`}>
+            {secret.theme === "love" && <PetalBackground className="z-0" />}
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-pulse" />
+                <h1 className="text-4xl font-magical text-purple-100 mb-2">
+                  {secret.title}
+                </h1>
+                <p className="text-purple-300">
+                  The secret has been revealed...
+                </p>
+              </div>
 
-            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
-              <div
-                className="prose prose-invert max-w-none text-purple-100"
-                dangerouslySetInnerHTML={{ __html: decryptedContent }}
-              />
-            </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-purple-500/20">
+                <div
+                  className="prose prose-invert max-w-none text-purple-100"
+                  dangerouslySetInnerHTML={{ __html: decryptedContent }}
+                />
+              </div>
 
-            <div className="text-center mt-8">
-              <button
-                onClick={() => {
-                  setDecryptedContent("");
-                  setPassword("");
-                }}
-                className="magic-button">
-                Hide Secret
-              </button>
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => {
+                    setDecryptedContent("");
+                    setPassword("");
+                  }}
+                  className="magic-button">
+                  Hide Secret
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -135,75 +142,78 @@ const ViewSecret: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`${getThemeClass(secret.theme)} p-8 w-full max-w-md backdrop-blur-sm border rounded-2xl shadow-2xl`}>
-        <div className="text-center mb-8">
-          <Lock className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-pulse" />
-          <h1 className="text-3xl font-magical text-purple-100 mb-2">
-            {secret.title}
-          </h1>
-          <p className="text-purple-300">This secret is protected by magic</p>
-        </div>
-
-        <form onSubmit={handleDecrypt} className="space-y-6">
-          <div>
-            <label className="block text-purple-200 mb-2 font-semibold">
-              Enter Password to Reveal
-            </label>
-            <input
-              type="text"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="magic-input w-full"
-              placeholder="The magical password..."
-              required
-              autoFocus
-            />
+        className={`${getThemeClass(secret.theme)} p-8 w-full max-w-md backdrop-blur-sm border rounded-2xl shadow-2xl relative overflow-hidden`}>
+        {secret.theme === "love" && <PetalBackground className="z-0" />}
+        <div className="relative z-10">
+          <div className="text-center mb-8">
+            <Lock className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-pulse" />
+            <h1 className="text-3xl font-magical text-purple-100 mb-2">
+              {secret.title}
+            </h1>
+            <p className="text-purple-300">This secret is protected by magic</p>
           </div>
 
-          {secret.hints.length > 0 && (
+          <form onSubmit={handleDecrypt} className="space-y-6">
             <div>
-              <button
-                type="button"
-                onClick={() => setShowHints(!showHints)}
-                className="flex items-center space-x-2 text-purple-300 hover:text-purple-200 transition-colors mb-3">
-                <Eye className="w-5 h-5" />
-                <span className="font-semibold">
-                  {showHints ? "Hide" : "Show"} Hints ({secret.hints.length})
-                </span>
-              </button>
-
-              {showHints && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="space-y-2">
-                  {secret.hints
-                    .sort((a, b) => a.order - b.order)
-                    .map((hint, index) => (
-                      <div
-                        key={index}
-                        className="bg-purple-900/30 border border-purple-500/50 rounded-lg px-4 py-3 text-purple-200">
-                        <span className="text-purple-400 font-semibold mr-2">
-                          Hint {index + 1}:
-                        </span>
-                        {hint.text}
-                      </div>
-                    ))}
-                </motion.div>
-              )}
+              <label className="block text-purple-200 mb-2 font-semibold">
+                Enter Password to Reveal
+              </label>
+              <input
+                type="text"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="magic-input w-full"
+                placeholder="The magical password..."
+                required
+                autoFocus
+              />
             </div>
-          )}
 
-          <button
-            type="submit"
-            disabled={decrypting}
-            className="magic-button w-full disabled:opacity-50 disabled:cursor-not-allowed">
-            {decrypting ? "Decrypting..." : "🔓 Reveal Secret"}
-          </button>
-        </form>
+            {secret.hints.length > 0 && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setShowHints(!showHints)}
+                  className="flex items-center space-x-2 text-purple-300 hover:text-purple-200 transition-colors mb-3">
+                  <Eye className="w-5 h-5" />
+                  <span className="font-semibold">
+                    {showHints ? "Hide" : "Show"} Hints ({secret.hints.length})
+                  </span>
+                </button>
 
-        <div className="mt-6 text-center text-purple-400 text-sm">
-          <p>Secret ID: {secret.secretId}</p>
+                {showHints && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="space-y-2">
+                    {secret.hints
+                      .sort((a, b) => a.order - b.order)
+                      .map((hint, index) => (
+                        <div
+                          key={index}
+                          className="bg-purple-900/30 border border-purple-500/50 rounded-lg px-4 py-3 text-purple-200">
+                          <span className="text-purple-400 font-semibold mr-2">
+                            Hint {index + 1}:
+                          </span>
+                          {hint.text}
+                        </div>
+                      ))}
+                  </motion.div>
+                )}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={decrypting}
+              className="magic-button w-full disabled:opacity-50 disabled:cursor-not-allowed">
+              {decrypting ? "Decrypting..." : "🔓 Reveal Secret"}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center text-purple-400 text-sm">
+            <p>Secret ID: {secret.secretId}</p>
+          </div>
         </div>
       </motion.div>
     </div>

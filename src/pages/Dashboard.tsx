@@ -58,6 +58,7 @@ const Dashboard: React.FC = () => {
       slytherin: "from-green-500 to-gray-500",
       ravenclaw: "from-blue-500 to-gray-500",
       hufflepuff: "from-yellow-500 to-gray-500",
+      love: "from-rose-500 to-red-500",
       dark: "from-gray-700 to-black",
       magic: "from-purple-500 to-indigo-500",
     };

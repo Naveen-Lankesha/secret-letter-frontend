@@ -5,6 +5,7 @@ import ReactQuill from "react-quill";
 import { Wand2, Plus, X, Copy, Check } from "lucide-react";
 import { secretAPI } from "../api/api";
 import toast from "react-hot-toast";
+import PetalBackground from "../components/PetalBackground";
 
 interface Hint {
   text: string;
@@ -28,6 +29,11 @@ const CreateSecret: React.FC = () => {
       value: "magic",
       label: "Magical",
       color: "from-purple-600 to-indigo-600",
+    },
+    {
+      value: "love",
+      label: "Love",
+      color: "from-rose-500 to-red-600",
     },
     {
       value: "gryffindor",
@@ -201,143 +207,146 @@ const CreateSecret: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="magic-card p-8">
-          <div className="text-center mb-8">
-            <Wand2 className="w-12 h-12 text-purple-400 mx-auto mb-4 animate-pulse" />
-            <h1 className="text-4xl font-magical text-purple-100 mb-2">
-              Create Secret Letter
-            </h1>
-            <p className="text-purple-300">
-              Cast your message into the magical realm
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
-            <div>
-              <label className="block text-purple-200 mb-2 font-semibold">
-                Title *
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="magic-input w-full"
-                placeholder="A mysterious title..."
-                required
-              />
-            </div>
-
-            {/* Theme Selection */}
-            <div>
-              <label className="block text-purple-200 mb-3 font-semibold">
-                Choose Your Theme
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {themes.map((t) => (
-                  <button
-                    key={t.value}
-                    type="button"
-                    onClick={() => setTheme(t.value)}
-                    className={`p-4 rounded-lg border-2 transition-all ${
-                      theme === t.value
-                        ? "border-purple-400 scale-105"
-                        : "border-purple-500/30 hover:border-purple-400/50"
-                    }`}>
-                    <div
-                      className={`h-12 rounded bg-gradient-to-r ${t.color} mb-2`}></div>
-                    <p className="text-purple-200 text-sm font-semibold">
-                      {t.label}
-                    </p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Content Editor */}
-            <div>
-              <label className="block text-purple-200 mb-2 font-semibold">
-                Your Secret Message *
-              </label>
-              <ReactQuill
-                theme="snow"
-                value={content}
-                onChange={setContent}
-                modules={modules}
-                className="bg-purple-900/20 rounded-lg"
-              />
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-purple-200 mb-2 font-semibold">
-                Secret Password *
-              </label>
-              <input
-                type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="magic-input w-full"
-                placeholder="The key to unlock your secret..."
-                required
-              />
-              <p className="text-purple-400 text-sm mt-1">
-                This password will be required to decrypt and view your secret
+          className="magic-card p-8 relative overflow-hidden">
+          {theme === "love" && <PetalBackground className="z-0" />}
+          <div className="relative z-10">
+            <div className="text-center mb-8">
+              <Wand2 className="w-12 h-12 text-purple-400 mx-auto mb-4 animate-pulse" />
+              <h1 className="text-4xl font-magical text-purple-100 mb-2">
+                Create Secret Letter
+              </h1>
+              <p className="text-purple-300">
+                Cast your message into the magical realm
               </p>
             </div>
 
-            {/* Hints */}
-            <div>
-              <label className="block text-purple-200 mb-2 font-semibold">
-                Hints (Optional)
-              </label>
-              <div className="space-y-3">
-                {hints.map((hint, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <div className="flex-1 bg-purple-900/30 border border-purple-500/50 rounded-lg px-4 py-3 text-white">
-                      <span className="text-purple-400 font-semibold mr-2">
-                        {index + 1}.
-                      </span>
-                      {hint.text}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => removeHint(index)}
-                      className="text-red-400 hover:text-red-300 p-2">
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
-                ))}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Title */}
+              <div>
+                <label className="block text-purple-200 mb-2 font-semibold">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="magic-input w-full"
+                  placeholder="A mysterious title..."
+                  required
+                />
+              </div>
 
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    value={newHint}
-                    onChange={(e) => setNewHint(e.target.value)}
-                    onKeyPress={(e) =>
-                      e.key === "Enter" && (e.preventDefault(), addHint())
-                    }
-                    className="magic-input flex-1"
-                    placeholder="Add a hint to help guess the password..."
-                  />
-                  <button
-                    type="button"
-                    onClick={addHint}
-                    className="magic-button px-4">
-                    <Plus className="w-5 h-5" />
-                  </button>
+              {/* Theme Selection */}
+              <div>
+                <label className="block text-purple-200 mb-3 font-semibold">
+                  Choose Your Theme
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {themes.map((t) => (
+                    <button
+                      key={t.value}
+                      type="button"
+                      onClick={() => setTheme(t.value)}
+                      className={`p-4 rounded-lg border-2 transition-all ${
+                        theme === t.value
+                          ? "border-purple-400 scale-105"
+                          : "border-purple-500/30 hover:border-purple-400/50"
+                      }`}>
+                      <div
+                        className={`h-12 rounded bg-gradient-to-r ${t.color} mb-2`}></div>
+                      <p className="text-purple-200 text-sm font-semibold">
+                        {t.label}
+                      </p>
+                    </button>
+                  ))}
                 </div>
               </div>
-            </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="magic-button w-full text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed">
-              {loading ? "Casting spell..." : "✨ Create Secret Letter"}
-            </button>
-          </form>
+              {/* Content Editor */}
+              <div>
+                <label className="block text-purple-200 mb-2 font-semibold">
+                  Your Secret Message *
+                </label>
+                <ReactQuill
+                  theme="snow"
+                  value={content}
+                  onChange={setContent}
+                  modules={modules}
+                  className="bg-purple-900/20 rounded-lg"
+                />
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="block text-purple-200 mb-2 font-semibold">
+                  Secret Password *
+                </label>
+                <input
+                  type="text"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="magic-input w-full"
+                  placeholder="The key to unlock your secret..."
+                  required
+                />
+                <p className="text-purple-400 text-sm mt-1">
+                  This password will be required to decrypt and view your secret
+                </p>
+              </div>
+
+              {/* Hints */}
+              <div>
+                <label className="block text-purple-200 mb-2 font-semibold">
+                  Hints (Optional)
+                </label>
+                <div className="space-y-3">
+                  {hints.map((hint, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="flex-1 bg-purple-900/30 border border-purple-500/50 rounded-lg px-4 py-3 text-white">
+                        <span className="text-purple-400 font-semibold mr-2">
+                          {index + 1}.
+                        </span>
+                        {hint.text}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeHint(index)}
+                        className="text-red-400 hover:text-red-300 p-2">
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                  ))}
+
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={newHint}
+                      onChange={(e) => setNewHint(e.target.value)}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && (e.preventDefault(), addHint())
+                      }
+                      className="magic-input flex-1"
+                      placeholder="Add a hint to help guess the password..."
+                    />
+                    <button
+                      type="button"
+                      onClick={addHint}
+                      className="magic-button px-4">
+                      <Plus className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="magic-button w-full text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                {loading ? "Casting spell..." : "✨ Create Secret Letter"}
+              </button>
+            </form>
+          </div>
         </motion.div>
       </div>
     </div>

@@ -39,6 +39,10 @@
     @apply bg-gradient-to-br from-yellow-900/50 to-gray-800/50 border-yellow-500/30;
   }
 
+  .love-theme {
+    @apply bg-gradient-to-br from-rose-900/45 via-red-900/35 to-fuchsia-900/25 border-rose-500/30;
+  }
+
   .stars-background {
     background-image:
       radial-gradient(2px 2px at 20px 30px, white, rgba(0, 0, 0, 0)),
