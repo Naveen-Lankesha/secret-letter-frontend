@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-indigo-950 via-purple-950 to-indigo-900 min-h-screen text-gray-100;
+  }
+}
+
+@layer components {
+  .magic-card {
+    @apply bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl shadow-2xl;
+  }
+
+  .magic-button {
+    @apply bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-purple-500/50 hover:scale-105;
+  }
+
+  .magic-input {
+    @apply bg-purple-900/30 border border-purple-500/50 rounded-lg px-4 py-3 text-white placeholder-purple-300/50 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/30 transition-all;
+  }
+
+  .gryffindor-theme {
+    @apply bg-gradient-to-br from-red-900/50 to-yellow-900/50 border-red-500/30;
+  }
+
+  .slytherin-theme {
+    @apply bg-gradient-to-br from-green-900/50 to-gray-900/50 border-green-500/30;
+  }
+
+  .ravenclaw-theme {
+    @apply bg-gradient-to-br from-blue-900/50 to-gray-900/50 border-blue-500/30;
+  }
+
+  .hufflepuff-theme {
+    @apply bg-gradient-to-br from-yellow-900/50 to-gray-800/50 border-yellow-500/30;
+  }
+
+  .stars-background {
+    background-image:
+      radial-gradient(2px 2px at 20px 30px, white, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 60px 70px, white, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 50px 50px, white, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 130px 80px, white, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 90px 10px, white, rgba(0, 0, 0, 0));
+    background-size: 200px 200px;
+    background-repeat: repeat;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-purple-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-purple-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-purple-500;
+}
+
+/* React Quill custom styles */
+.ql-toolbar {
+  @apply bg-purple-900/30 border-purple-500/50 rounded-t-lg;
+}
+
+.ql-container {
+  @apply bg-purple-900/20 border-purple-500/50 rounded-b-lg text-white;
+}
+
+.ql-editor {
+  @apply min-h-[300px] text-white;
+}
+
+.ql-editor.ql-blank::before {
+  @apply text-purple-300/50;
+}
+
+.ql-stroke {
+  @apply stroke-purple-300;
+}
+
+.ql-fill {
+  @apply fill-purple-300;
+}
+
+.ql-picker-label {
+  @apply text-purple-300;
+}
