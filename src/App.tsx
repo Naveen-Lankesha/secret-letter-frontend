@@ -8,6 +8,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -35,31 +36,34 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 
 function AppRoutes() {
   return (
-    <>
+    <div className="relative z-10 flex min-h-screen flex-col">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/secret/:secretId" element={<ViewSecret />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/create"
-          element={
-            <ProtectedRoute>
-              <CreateSecret />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </>
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/secret/:secretId" element={<ViewSecret />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              <ProtectedRoute>
+                <CreateSecret />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
@@ -68,7 +72,7 @@ function App() {
     <AuthProvider>
       <MusicProvider>
         <Router>
-          <div className="min-h-screen stars-background">
+          <div className="min-h-screen stars-background flex flex-col">
             <MagicBackground />
             <AppRoutes />
             <Toaster
