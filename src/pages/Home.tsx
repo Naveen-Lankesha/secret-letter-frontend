@@ -55,7 +55,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="flex justify-center mb-6">
-            <Wand2 className="w-20 h-20 text-purple-400 animate-float" />
+            <Wand2 className="w-20 h-20 text-amber-200 drop-shadow-[0_0_18px_rgba(253,230,138,0.35)] animate-float" />
           </div>
           <h1 className="relative z-10 text-6xl font-magical mb-6">
             <span className="relative inline-block">
@@ -176,13 +176,13 @@ const Home: React.FC = () => {
           <div className="flex justify-center space-x-4">
             {isAuthenticated ? (
               <Link to="/create" className="magic-button text-lg px-8 py-4">
-                <Sparkles className="inline-block w-5 h-5 mr-2" />
+                <Sparkles className="inline-block w-5 h-5 mr-2 text-amber-200 drop-shadow-[0_0_10px_rgba(253,230,138,0.25)]" />
                 Create New Secret
               </Link>
             ) : (
               <>
                 <Link to="/register" className="magic-button text-lg px-8 py-4">
-                  <Sparkles className="inline-block w-5 h-5 mr-2" />
+                  <Sparkles className="inline-block w-5 h-5 mr-2 text-amber-200 drop-shadow-[0_0_10px_rgba(253,230,138,0.25)]" />
                   Start Your Journey
                 </Link>
                 <Link
@@ -202,9 +202,9 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
             className="magic-card p-8 text-center hover:scale-105 transition-transform">
-            <Lock className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-            <h3 className="text-xl font-magical text-purple-100 mb-3">
-              Encrypted Magic
+            <Lock className="w-12 h-12 text-amber-200 drop-shadow-[0_0_16px_rgba(253,230,138,0.28)] mx-auto mb-4" />
+            <h3 className="text-xl font-magical mb-3">
+              <span className="magic-title">Encrypted Magic</span>
             </h3>
             <p className="text-purple-300">
               Your secrets are protected with powerful encryption spells,
@@ -217,9 +217,9 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
             className="magic-card p-8 text-center hover:scale-105 transition-transform">
-            <Eye className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-            <h3 className="text-xl font-magical text-purple-100 mb-3">
-              Magical Hints
+            <Eye className="w-12 h-12 text-amber-200 drop-shadow-[0_0_16px_rgba(253,230,138,0.28)] mx-auto mb-4" />
+            <h3 className="text-xl font-magical mb-3">
+              <span className="magic-title">Magical Hints</span>
             </h3>
             <p className="text-purple-300">
               Guide your recipients with mystical hints to help them discover
@@ -232,9 +232,9 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
             className="magic-card p-8 text-center hover:scale-105 transition-transform">
-            <Shield className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-            <h3 className="text-xl font-magical text-purple-100 mb-3">
-              Secure Sharing
+            <Shield className="w-12 h-12 text-amber-200 drop-shadow-[0_0_16px_rgba(253,230,138,0.28)] mx-auto mb-4" />
+            <h3 className="text-xl font-magical mb-3">
+              <span className="magic-title">Secure Sharing</span>
             </h3>
             <p className="text-purple-300">
               Share your secret ID safely. Your message remains protected until
@@ -249,9 +249,9 @@ const Home: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.8 }}
           className="magic-card p-10 max-w-2xl mx-auto text-center">
-          <Sparkles className="w-12 h-12 text-purple-400 mx-auto mb-4 animate-sparkle" />
-          <h2 className="text-3xl font-magical text-purple-100 mb-4">
-            Received a Secret ID?
+          <Sparkles className="w-12 h-12 text-amber-200 drop-shadow-[0_0_16px_rgba(253,230,138,0.28)] mx-auto mb-4 animate-sparkle" />
+          <h2 className="text-3xl font-magical mb-4">
+            <span className="magic-title">Received a Secret ID?</span>
           </h2>
           <p className="text-purple-300 mb-6">
             Enter the magical ID below to view the secret letter
