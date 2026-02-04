@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, Eye, Sparkles, AlertCircle } from "lucide-react";
@@ -21,6 +21,8 @@ const ViewSecret: React.FC = () => {
   const [secret, setSecret] = useState<Secret | null>(null);
   const [password, setPassword] = useState("");
   const [decryptedContent, setDecryptedContent] = useState("");
+  const [revealFlashKey, setRevealFlashKey] = useState(0);
+  const flashAudioRef = useRef<HTMLAudioElement | null>(null);
   const [loading, setLoading] = useState(true);
   const [decrypting, setDecrypting] = useState(false);
   const [showHints, setShowHints] = useState(false);
@@ -47,6 +49,18 @@ const ViewSecret: React.FC = () => {
     try {
       const response = await secretAPI.decrypt(secretId!, password);
       setDecryptedContent(response.data.content);
+      setRevealFlashKey((k) => k + 1);
+
+      const audio = flashAudioRef.current;
+      if (audio) {
+        try {
+          audio.currentTime = 0;
+          audio.volume = 0.85;
+          await audio.play();
+        } catch {
+          // Ignore autoplay/decoding errors; flash still shows.
+        }
+      }
       toast.success("Secret revealed!");
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Incorrect password");
@@ -71,6 +85,7 @@ const ViewSecret: React.FC = () => {
   if (loading) {
     return (
       <div className="relative z-10 min-h-screen flex items-center justify-center">
+        <audio ref={flashAudioRef} src="/audio/flash.mp3" preload="auto" />
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
@@ -79,6 +94,7 @@ const ViewSecret: React.FC = () => {
   if (!secret) {
     return (
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4">
+        <audio ref={flashAudioRef} src="/audio/flash.mp3" preload="auto" />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -98,6 +114,20 @@ const ViewSecret: React.FC = () => {
   if (decryptedContent) {
     return (
       <div className="relative z-10 min-h-screen px-4 py-12">
+        <audio ref={flashAudioRef} src="/audio/flash.mp3" preload="auto" />
+        <motion.div
+          key={revealFlashKey}
+          className="fixed inset-0 z-[60] pointer-events-none"
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: [0, 1, 0], scale: [0.92, 1.05, 1.18] }}
+          transition={{ duration: 0.9, times: [0, 0.18, 1], ease: "easeOut" }}
+          style={{
+            background:
+              "radial-gradient(circle at 50% 45%, rgba(255,255,255,0.95) 0%, rgba(167,243,208,0.65) 22%, rgba(16,185,129,0.22) 44%, rgba(0,0,0,0) 70%)",
+            mixBlendMode: "screen",
+            filter: "blur(0.2px)",
+          }}
+        />
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -151,6 +181,7 @@ const ViewSecret: React.FC = () => {
 
   return (
     <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+      <audio ref={flashAudioRef} src="/audio/flash.mp3" preload="auto" />
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
