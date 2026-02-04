@@ -74,31 +74,35 @@
 
 /* React Quill custom styles */
 .ql-toolbar {
-  @apply bg-purple-900/30 border-purple-500/50 rounded-t-lg;
+  @apply bg-white/95 border border-gray-200 rounded-t-lg;
 }
 
 .ql-container {
-  @apply bg-purple-900/20 border-purple-500/50 rounded-b-lg text-white;
+  @apply bg-white border border-gray-200 rounded-b-lg;
 }
 
 .ql-editor {
-  @apply min-h-[300px] text-white;
+  @apply min-h-[300px] text-gray-900;
 }
 
 .ql-editor.ql-blank::before {
-  @apply text-purple-300/50;
+  @apply text-gray-400;
 }
 
 .ql-stroke {
-  @apply stroke-purple-300;
+  @apply stroke-gray-700;
 }
 
 .ql-fill {
-  @apply fill-purple-300;
+  @apply fill-gray-700;
 }
 
 .ql-picker-label {
-  @apply text-purple-300;
+  @apply text-gray-700;
+}
+
+.ql-picker-options {
+  @apply bg-white text-gray-900 border border-gray-200;
 }
 
 /* Home title: magical shimmer (text-safe) */
