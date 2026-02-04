@@ -28,7 +28,7 @@
   }
 
   .slytherin-theme {
-    @apply bg-gradient-to-br from-green-900/50 to-gray-900/50 border-green-500/30;
+    @apply bg-gradient-to-br from-emerald-950/55 via-black/45 to-slate-900/45 border-emerald-400/25;
   }
 
   .ravenclaw-theme {

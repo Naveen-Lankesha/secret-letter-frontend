@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
   const getThemeColor = (theme: string) => {
     const colors: { [key: string]: string } = {
       gryffindor: "from-red-500 to-yellow-500",
-      slytherin: "from-green-500 to-gray-500",
+      slytherin: "from-emerald-500 to-slate-300",
       ravenclaw: "from-blue-500 to-gray-500",
       hufflepuff: "from-yellow-500 to-gray-500",
       love: "from-rose-500 to-red-500",

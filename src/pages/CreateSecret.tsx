@@ -7,6 +7,7 @@ import { secretAPI } from "../api/api";
 import toast from "react-hot-toast";
 import PetalBackground from "../components/PetalBackground";
 import SpellBeamBackground from "../components/SpellBeamBackground";
+import SerpentBackground from "../components/SerpentBackground";
 
 interface Hint {
   text: string;
@@ -44,7 +45,7 @@ const CreateSecret: React.FC = () => {
     {
       value: "slytherin",
       label: "Slytherin",
-      color: "from-green-600 to-gray-600",
+      color: "from-emerald-600 to-slate-400",
     },
     {
       value: "ravenclaw",
@@ -210,6 +211,7 @@ const CreateSecret: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="magic-card p-8 relative overflow-hidden">
           {theme === "love" && <PetalBackground className="z-0" />}
+          {theme === "slytherin" && <SerpentBackground className="z-0" />}
           {theme === "dark" && (
             <SpellBeamBackground casts={5} className="z-0" />
           )}

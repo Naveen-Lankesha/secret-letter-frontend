@@ -6,6 +6,7 @@ import { secretAPI } from "../api/api";
 import toast from "react-hot-toast";
 import PetalBackground from "../components/PetalBackground";
 import SpellBeamBackground from "../components/SpellBeamBackground";
+import SerpentBackground from "../components/SerpentBackground";
 
 interface Secret {
   secretId: string;
@@ -103,6 +104,9 @@ const ViewSecret: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className={`${getThemeClass(secret.theme)} p-8 backdrop-blur-sm border rounded-2xl shadow-2xl relative overflow-hidden`}>
             {secret.theme === "love" && <PetalBackground className="z-0" />}
+            {secret.theme === "slytherin" && (
+              <SerpentBackground className="z-0" />
+            )}
             {secret.theme === "dark" && (
               <SpellBeamBackground
                 casts={5}
@@ -152,6 +156,7 @@ const ViewSecret: React.FC = () => {
         animate={{ opacity: 1, scale: 1 }}
         className={`${getThemeClass(secret.theme)} p-8 w-full max-w-md backdrop-blur-sm border rounded-2xl shadow-2xl relative overflow-hidden`}>
         {secret.theme === "love" && <PetalBackground className="z-0" />}
+        {secret.theme === "slytherin" && <SerpentBackground className="z-0" />}
         {secret.theme === "dark" && (
           <SpellBeamBackground
             casts={4}
