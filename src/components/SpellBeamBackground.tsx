@@ -5,16 +5,63 @@ type SpellBeamBackgroundProps = {
   casts?: number;
   className?: string;
   origin?: "bottom-right" | "bottom-left";
+  variant?: "dark" | "hero";
+  showOrb?: boolean;
 };
 
 const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
   casts = 4,
   className = "",
   origin = "bottom-right",
+  variant = "dark",
+  showOrb = true,
 }) => {
   const direction: "ltr" | "rtl" = origin === "bottom-left" ? "ltr" : "rtl";
   const beamTop = "50%";
   const orbTop = "-10%";
+
+  const palette = useMemo(() => {
+    if (variant === "hero") {
+      return {
+        texture:
+          "radial-gradient(circle at 20% 30%, rgba(168,85,247,0.10), transparent 40%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.08), transparent 45%), repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, rgba(0,0,0,0) 6px, rgba(0,0,0,0) 10px)",
+        orb: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(167,139,250,0.70) 24%, rgba(236,72,153,0.40) 46%, rgba(168,85,247,0) 72%)",
+        orbShadow:
+          "0 0 42px rgba(168,85,247,0.22), 0 0 90px rgba(236,72,153,0.12)",
+        beamGlow:
+          "linear-gradient(90deg, rgba(168,85,247,0) 0%, rgba(168,85,247,0.18) 12%, rgba(236,72,153,0.48) 40%, rgba(253,230,138,0.26) 65%, rgba(168,85,247,0.14) 88%, rgba(168,85,247,0) 100%)",
+        beamCore:
+          "linear-gradient(90deg, rgba(168,85,247,0) 0%, rgba(167,139,250,0.85) 20%, rgba(255,255,255,0.95) 45%, rgba(253,230,138,0.62) 70%, rgba(168,85,247,0) 100%)",
+        plasma:
+          "linear-gradient(90deg, rgba(168,85,247,0) 0%, rgba(236,72,153,0.18) 22%, rgba(167,139,250,0.30) 45%, rgba(253,230,138,0.16) 68%, rgba(168,85,247,0) 100%)",
+        arcStroke: "rgba(253, 230, 138, 0.55)",
+        arcShadow: "drop-shadow(0 0 10px rgba(168,85,247,0.20))",
+        sparkFill: "rgba(255, 255, 255, 0.9)",
+        sparkShadow: "0 0 12px rgba(168,85,247,0.26)",
+        centerGlow:
+          "radial-gradient(circle at 50% 50%, rgba(168,85,247,0.12), transparent 60%)",
+      };
+    }
+
+    return {
+      texture:
+        "radial-gradient(circle at 20% 30%, rgba(34,197,94,0.08), transparent 40%), radial-gradient(circle at 80% 70%, rgba(34,197,94,0.06), transparent 45%), repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, rgba(0,0,0,0) 6px, rgba(0,0,0,0) 10px)",
+      orb: "radial-gradient(circle, rgba(236,252,203,0.95) 0%, rgba(74,222,128,0.75) 22%, rgba(34,197,94,0.35) 45%, rgba(34,197,94,0) 70%)",
+      orbShadow: "0 0 42px rgba(34,197,94,0.22), 0 0 90px rgba(34,197,94,0.12)",
+      beamGlow:
+        "linear-gradient(90deg, rgba(34,197,94,0) 0%, rgba(34,197,94,0.25) 12%, rgba(34,197,94,0.55) 40%, rgba(163,230,53,0.35) 65%, rgba(34,197,94,0.18) 88%, rgba(34,197,94,0) 100%)",
+      beamCore:
+        "linear-gradient(90deg, rgba(34,197,94,0) 0%, rgba(74,222,128,0.9) 20%, rgba(236,252,203,0.95) 45%, rgba(190,242,100,0.65) 70%, rgba(34,197,94,0) 100%)",
+      plasma:
+        "linear-gradient(90deg, rgba(34,197,94,0) 0%, rgba(163,230,53,0.22) 22%, rgba(74,222,128,0.35) 45%, rgba(163,230,53,0.22) 68%, rgba(34,197,94,0) 100%)",
+      arcStroke: "rgba(190, 242, 100, 0.65)",
+      arcShadow: "drop-shadow(0 0 10px rgba(34,197,94,0.18))",
+      sparkFill: "rgba(236, 252, 203, 0.9)",
+      sparkShadow: "0 0 12px rgba(34,197,94,0.28)",
+      centerGlow:
+        "radial-gradient(circle at 50% 50%, rgba(34,197,94,0.12), transparent 60%)",
+    };
+  }, [variant]);
 
   const sparkCount = Math.max(14, casts * 10);
   const arcCount = Math.max(2, Math.min(6, casts));
@@ -72,43 +119,42 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 30%, rgba(34,197,94,0.08), transparent 40%), radial-gradient(circle at 80% 70%, rgba(34,197,94,0.06), transparent 45%), repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, rgba(0,0,0,0) 6px, rgba(0,0,0,0) 10px)",
+          backgroundImage: palette.texture,
           backgroundBlendMode: "screen",
         }}
       />
 
       {/* source orb */}
-      <motion.div
-        className="absolute"
-        style={{
-          top: orbTop,
-          left: "80%",
-          width: "180px",
-          height: "180px",
-          transform: "translate(-50%, -50%)",
-          mixBlendMode: "screen",
-        }}
-        initial={{ opacity: 0.6, scale: 0.92 }}
-        animate={{ opacity: [0.45, 0.95, 0.55], scale: [0.9, 1.05, 0.95] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
-        <div
-          className="absolute inset-0 rounded-full"
+      {showOrb && (
+        <motion.div
+          className="absolute"
           style={{
-            background:
-              "radial-gradient(circle, rgba(236,252,203,0.95) 0%, rgba(74,222,128,0.75) 22%, rgba(34,197,94,0.35) 45%, rgba(34,197,94,0) 70%)",
-            filter: "blur(0.2px)",
+            top: orbTop,
+            left: "80%",
+            width: "180px",
+            height: "180px",
+            transform: "translate(-50%, -50%)",
+            mixBlendMode: "screen",
           }}
-        />
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            boxShadow:
-              "0 0 42px rgba(34,197,94,0.22), 0 0 90px rgba(34,197,94,0.12)",
-            filter: "blur(0.6px)",
-          }}
-        />
-      </motion.div>
+          initial={{ opacity: 0.6, scale: 0.92 }}
+          animate={{ opacity: [0.45, 0.95, 0.55], scale: [0.9, 1.05, 0.95] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: palette.orb,
+              filter: "blur(0.2px)",
+            }}
+          />
+          <div
+            className="absolute inset-0 rounded-full"
+            style={{
+              boxShadow: palette.orbShadow,
+              filter: "blur(0.6px)",
+            }}
+          />
+        </motion.div>
+      )}
 
       {/* main horizontal beam (layered for VFX look) */}
       <motion.div
@@ -129,8 +175,7 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
         <div
           className="absolute inset-0 rounded-full"
           style={{
-            background:
-              "linear-gradient(90deg, rgba(34,197,94,0) 0%, rgba(34,197,94,0.25) 12%, rgba(34,197,94,0.55) 40%, rgba(163,230,53,0.35) 65%, rgba(34,197,94,0.18) 88%, rgba(34,197,94,0) 100%)",
+            background: palette.beamGlow,
             filter: "blur(6px)",
             opacity: 0.9,
           }}
@@ -141,9 +186,11 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
           style={{
             height: "6px",
             transform: "translateY(-50%)",
-            background:
-              "linear-gradient(90deg, rgba(34,197,94,0) 0%, rgba(74,222,128,0.9) 20%, rgba(236,252,203,0.95) 45%, rgba(190,242,100,0.65) 70%, rgba(34,197,94,0) 100%)",
-            boxShadow: "0 0 18px rgba(74,222,128,0.35)",
+            background: palette.beamCore,
+            boxShadow:
+              variant === "hero"
+                ? "0 0 18px rgba(168,85,247,0.30)"
+                : "0 0 18px rgba(74,222,128,0.35)",
           }}
         />
 
@@ -151,8 +198,7 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{
-            backgroundImage:
-              "linear-gradient(90deg, rgba(34,197,94,0) 0%, rgba(163,230,53,0.22) 22%, rgba(74,222,128,0.35) 45%, rgba(163,230,53,0.22) 68%, rgba(34,197,94,0) 100%)",
+            backgroundImage: palette.plasma,
             backgroundSize: "240% 100%",
             filter: "blur(2.2px)",
             opacity: 0.75,
@@ -181,13 +227,13 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
           height="100%"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
-          style={{ filter: "drop-shadow(0 0 10px rgba(34,197,94,0.18))" }}>
+          style={{ filter: palette.arcShadow }}>
           {arcs.map((arc, idx) => (
             <motion.path
               key={idx}
               d={arc.d}
               fill="none"
-              stroke="rgba(190, 242, 100, 0.65)"
+              stroke={palette.arcStroke}
               strokeWidth={arc.strokeWidth}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -218,8 +264,8 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
             left: `${s.along * 100}%`,
             width: `${s.size}px`,
             height: `${s.size}px`,
-            background: "rgba(236, 252, 203, 0.9)",
-            boxShadow: "0 0 12px rgba(34,197,94,0.28)",
+            background: palette.sparkFill,
+            boxShadow: palette.sparkShadow,
             mixBlendMode: "screen",
           }}
           initial={{ opacity: 0, x: 0, y: 0, scale: 0.9 }}
@@ -239,7 +285,10 @@ const SpellBeamBackground: React.FC<SpellBeamBackgroundProps> = ({
       ))}
 
       {/* center glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.12),transparent_60%)]" />
+      <div
+        className="absolute inset-0"
+        style={{ background: palette.centerGlow }}
+      />
     </div>
   );
 };

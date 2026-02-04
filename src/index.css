@@ -100,3 +100,69 @@
 .ql-picker-label {
   @apply text-purple-300;
 }
+
+/* Home title: magical shimmer (text-safe) */
+.magic-title {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 248, 210, 1) 10%,
+    rgba(255, 230, 128, 1) 22%,
+    rgba(255, 215, 64, 1) 36%,
+    rgba(253, 230, 138, 1) 48%,
+    rgba(167, 139, 250, 1) 58%,
+    rgba(244, 114, 182, 1) 66%,
+    rgba(255, 215, 64, 1) 82%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    magic-title-gradient 80s ease-in-out infinite,
+    magic-title-glow 7.5s ease-in-out infinite;
+}
+
+/* Letter-by-letter fade overlay (keeps title readable) */
+.magic-title-letter {
+  display: inline-block;
+  color: rgba(255, 248, 220, 1);
+  text-shadow:
+    0 0 14px rgba(255, 248, 210, 0.45),
+    0 0 28px rgba(255, 215, 64, 0.38),
+    0 0 46px rgba(253, 230, 138, 0.3),
+    0 0 18px rgba(168, 85, 247, 0.18),
+    0 0 28px rgba(236, 72, 153, 0.12);
+}
+
+@keyframes magic-title-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes magic-title-glow {
+  0% {
+    text-shadow:
+      0 0 10px rgba(168, 85, 247, 0.22),
+      0 0 26px rgba(236, 72, 153, 0.12),
+      0 0 34px rgba(253, 230, 138, 0.44),
+      0 0 18px rgba(255, 215, 64, 0.34),
+      0 0 10px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    text-shadow:
+      0 0 18px rgba(168, 85, 247, 0.42),
+      0 0 42px rgba(236, 72, 153, 0.24),
+      0 0 78px rgba(253, 230, 138, 0.58),
+      0 0 46px rgba(255, 215, 64, 0.44),
+      0 0 24px rgba(255, 255, 255, 0.36);
+  }
+}
