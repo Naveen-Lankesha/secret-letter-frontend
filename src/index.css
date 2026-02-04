@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-indigo-950 via-purple-950 to-indigo-900 min-h-screen text-gray-100;
+    @apply bg-gradient-to-br from-black via-indigo-900 to-purple-900 min-h-screen text-gray-100;
   }
 }
 
