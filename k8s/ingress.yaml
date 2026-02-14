@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: secret-letter-frontend
+  namespace: secret-letter
+  labels:
+    app.kubernetes.io/name: secret-letter-frontend
+    app.kubernetes.io/part-of: secret-letter
+  annotations:
+    # Assumes nginx ingress controller
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  # For newer ingress-nginx versions you can use ingressClassName instead of the annotation:
+  # ingressClassName: nginx
+  rules:
+    - host: secret-letter.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: secret-letter-frontend
+                port:
+                  number: 80
+  # TLS example:
+  # tls:
+  #   - hosts:
+  #       - secret-letter.local
+  #     secretName: secret-letter-tls

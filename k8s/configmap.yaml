@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: secret-letter-frontend-config
+  namespace: secret-letter
+  labels:
+    app.kubernetes.io/name: secret-letter-frontend
+    app.kubernetes.io/part-of: secret-letter
+data:
+  # The container listens on this port (matches Dockerfile + server.mjs default)
+  PORT: "8080"
+
+  # Optional: enables same-origin /api proxying inside server.mjs.
+  # Point this to your backend Service (change name/port to match your backend manifests).
+  BACKEND_URL: "http://secret-letter-backend:5000"
