@@ -27,13 +27,12 @@ npm run preview
 
 ## Configuration
 
-The frontend is configured to proxy API requests to `http://localhost:5000`. This is set in `vite.config.ts`.
+The frontend uses environment variables from `.env` for configuration.
 
-If you deploy the backend to a different URL, update the API configuration in `src/api/api.ts`:
+- `VITE_API_BASE_URL` (default: `/api`) controls the Axios base URL used in `src/api/api.ts`.
+- `VITE_DEV_PROXY_TARGET` (default: `http://localhost:5000`) controls the Vite dev-server proxy target in `vite.config.ts`.
 
-```typescript
-const API_URL = "https://your-backend-url.com/api";
-```
+For local dev with the backend running on the default port, the provided `.env` values should work as-is.
 
 ## Features Overview
 
@@ -116,7 +115,7 @@ If port 3000 is already in use, Vite will automatically use the next available p
 
 ### API Connection Issues
 
-Make sure the backend server is running on `http://localhost:5000` before starting the frontend.
+Make sure the backend server is running (default `http://localhost:5000`) before starting the frontend, or update `VITE_DEV_PROXY_TARGET` in `.env`.
 
 ### Build Errors
 
