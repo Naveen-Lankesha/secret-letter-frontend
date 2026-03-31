@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Scroll, Plus, Eye, Trash2, Calendar, BarChart } from "lucide-react";
-import { secretAPI } from "../api/api";
+import { Scroll, Plus, Eye, Trash2, Calendar } from "lucide-react";
+import { deleteSecretDoc, listSecretsForUser } from "../services/secrets";
+import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
 interface Secret {
-  _id: string;
   secretId: string;
   title: string;
   theme: string;
-  createdAt: string;
-  viewCount: number;
-  hints: any[];
+  createdAt: Date | null;
+  hintsCount: number;
 }
 
 const Dashboard: React.FC = () => {
   const [secrets, setSecrets] = useState<Secret[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (!user?.uid) return;
     loadSecrets();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.uid]);
 
   const loadSecrets = async () => {
     try {
-      const response = await secretAPI.getMySecrets();
-      setSecrets(response.data.secrets);
+      if (!user?.uid) return;
+      const list = await listSecretsForUser(user.uid);
+      setSecrets(list);
     } catch (error: any) {
       toast.error("Failed to load secrets");
     } finally {
@@ -44,8 +47,9 @@ const Dashboard: React.FC = () => {
     }
 
     try {
-      await secretAPI.delete(secretId);
-      setSecrets(secrets.filter((s) => s.secretId !== secretId));
+      if (!user?.uid) throw new Error("Not authenticated");
+      await deleteSecretDoc(secretId, user.uid);
+      setSecrets((prev) => prev.filter((s) => s.secretId !== secretId));
       toast.success("Secret deleted successfully");
     } catch (error: any) {
       toast.error("Failed to delete secret");
@@ -118,7 +122,7 @@ const Dashboard: React.FC = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {secrets.map((secret, index) => (
                 <motion.div
-                  key={secret._id}
+                  key={secret.secretId}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -139,16 +143,12 @@ const Dashboard: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <Calendar className="w-4 h-4" />
                       <span>
-                        {new Date(secret.createdAt).toLocaleDateString()}
+                        {(secret.createdAt ?? new Date()).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <BarChart className="w-4 h-4" />
-                      <span>{secret.viewCount} views</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
                       <Scroll className="w-4 h-4" />
-                      <span>{secret.hints.length} hints</span>
+                      <span>{secret.hintsCount} hints</span>
                     </div>
                   </div>
 

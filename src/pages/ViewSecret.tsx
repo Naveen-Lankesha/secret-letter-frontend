@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, Eye, Sparkles, AlertCircle } from "lucide-react";
-import { secretAPI } from "../api/api";
+import { getSecretDoc } from "../services/secrets";
+import {
+  decryptSecretHtml,
+  type EncryptedPayloadV1,
+} from "../utils/secretCrypto";
 import toast from "react-hot-toast";
 import PetalBackground from "../components/PetalBackground";
 import SpellBeamBackground from "../components/SpellBeamBackground";
@@ -13,7 +17,7 @@ interface Secret {
   title: string;
   hints: { text: string; order: number }[];
   theme: string;
-  createdAt: string;
+  encryptedPayload: EncryptedPayloadV1;
 }
 
 const ViewSecret: React.FC = () => {
@@ -33,10 +37,17 @@ const ViewSecret: React.FC = () => {
 
   const loadSecret = async () => {
     try {
-      const response = await secretAPI.getById(secretId!);
-      setSecret(response.data.secret);
+      if (!secretId) throw new Error("Secret not found");
+      const doc = await getSecretDoc(secretId);
+      setSecret({
+        secretId: doc.secretId,
+        title: doc.title,
+        hints: doc.hints ?? [],
+        theme: doc.theme,
+        encryptedPayload: doc.encryptedPayload,
+      });
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Secret not found");
+      toast.error(error?.message || "Secret not found");
     } finally {
       setLoading(false);
     }
@@ -47,8 +58,12 @@ const ViewSecret: React.FC = () => {
     setDecrypting(true);
 
     try {
-      const response = await secretAPI.decrypt(secretId!, password);
-      setDecryptedContent(response.data.content);
+      if (!secret) throw new Error("Secret not found");
+      const content = await decryptSecretHtml(
+        secret.encryptedPayload,
+        password,
+      );
+      setDecryptedContent(content);
       setRevealFlashKey((k) => k + 1);
 
       const audio = flashAudioRef.current;
@@ -63,7 +78,7 @@ const ViewSecret: React.FC = () => {
       }
       toast.success("Secret revealed!");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Incorrect password");
+      toast.error(error?.message || "Incorrect password");
     } finally {
       setDecrypting(false);
     }

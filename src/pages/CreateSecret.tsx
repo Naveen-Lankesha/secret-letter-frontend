@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import { Wand2, Plus, X, Copy, Check } from "lucide-react";
-import { secretAPI } from "../api/api";
+import { useAuth } from "../context/AuthContext";
+import { createSecretDoc } from "../services/secrets";
+import { encryptSecretHtml } from "../utils/secretCrypto";
 import toast from "react-hot-toast";
 import PetalBackground from "../components/PetalBackground";
 import SpellBeamBackground from "../components/SpellBeamBackground";
@@ -25,6 +27,7 @@ const CreateSecret: React.FC = () => {
   const [createdSecretId, setCreatedSecretId] = useState("");
   const [copied, setCopied] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const themes = [
     {
@@ -92,18 +95,22 @@ const CreateSecret: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await secretAPI.create({
+      if (!user?.uid) {
+        throw new Error("You must be logged in");
+      }
+      const encryptedPayload = await encryptSecretHtml(content, password);
+      const secretId = await createSecretDoc({
+        ownerUid: user.uid,
         title,
-        content,
-        password,
-        hints,
         theme,
+        hints,
+        encryptedPayload,
       });
 
-      setCreatedSecretId(response.data.secretId);
+      setCreatedSecretId(secretId);
       toast.success("Secret created successfully!");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to create secret");
+      toast.error(error?.message || "Failed to create secret");
     } finally {
       setLoading(false);
     }

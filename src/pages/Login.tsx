@@ -21,7 +21,16 @@ const Login: React.FC = () => {
       toast.success("Welcome back, wizard!");
       navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Login failed");
+      const code = (error?.code as string | undefined) ?? "";
+      const message =
+        code === "auth/invalid-credential"
+          ? "Incorrect email or password"
+          : code === "auth/too-many-requests"
+            ? "Too many attempts. Try again later."
+            : code === "auth/network-request-failed"
+              ? "Network error. Check your connection."
+              : "Login failed";
+      toast.error(message);
     } finally {
       setLoading(false);
     }

@@ -1,15 +1,22 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { authAPI } from "../api/api";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  type User as FirebaseUser,
+} from "firebase/auth";
+import { auth } from "../firebase";
 
 interface User {
-  id: string;
-  email: string;
-  name?: string;
+  uid: string;
+  email: string | null;
+  name?: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
@@ -23,57 +30,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token"),
-  );
   const [loading, setLoading] = useState(true);
 
+  const mapUser = (u: FirebaseUser): User => ({
+    uid: u.uid,
+    email: u.email,
+    name: u.displayName,
+  });
+
   useEffect(() => {
-    const loadUser = async () => {
-      if (token) {
-        try {
-          const response = await authAPI.getProfile();
-          setUser(response.data.user);
-        } catch (error) {
-          localStorage.removeItem("token");
-          setToken(null);
-        }
+    const unsub = onAuthStateChanged(auth, (fbUser) => {
+      if (fbUser) {
+        setUser(mapUser(fbUser));
+      } else {
+        setUser(null);
       }
       setLoading(false);
-    };
+    });
 
-    loadUser();
-  }, [token]);
+    return () => unsub();
+  }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await authAPI.login({ email, password });
-    const { token: newToken, user: newUser } = response.data;
-
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
-    setUser(newUser);
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    setUser(mapUser(cred.user));
   };
 
   const register = async (email: string, password: string, name?: string) => {
-    const response = await authAPI.register({ email, password, name });
-    const { token: newToken, user: newUser } = response.data;
-
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
-    setUser(newUser);
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    if (name?.trim()) {
+      await updateProfile(cred.user, { displayName: name.trim() });
+    }
+    setUser(mapUser(cred.user));
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
+    signOut(auth);
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
         login,
         register,
         logout,

@@ -22,7 +22,18 @@ const Register: React.FC = () => {
       toast.success("Welcome to the magical world!");
       navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Registration failed");
+      const code = (error?.code as string | undefined) ?? "";
+      const message =
+        code === "auth/email-already-in-use"
+          ? "This email is already in use"
+          : code === "auth/invalid-email"
+            ? "Please enter a valid email"
+            : code === "auth/weak-password"
+              ? "Password is too weak (min 6 characters)"
+              : code === "auth/network-request-failed"
+                ? "Network error. Check your connection."
+                : "Registration failed";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
