@@ -24,7 +24,11 @@ FROM gcr.io/distroless/nodejs20-debian12:nonroot AS runtime
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV VITE_API_BASE_URL=/api
+ENV VITE_DEV_PORT=3000
+ENV VITE_DEV_PROXY_TARGET=http://localhost:5000
 ENV PORT=8080
+ENV BACKEND_URL=http://secret-letter-backend:5000
 
 COPY --from=build /app/dist ./dist
 COPY server.mjs ./server.mjs
